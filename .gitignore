@@ -1,2 +1,12 @@
-.env
+#.env (secrets)
+# if want to open .env, write example.env, etc
+.env*
+
+#vscode
 .vscode
+
+# pycharm
+.idea
+
+#pyenv
+.python-version
