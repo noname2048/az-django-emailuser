@@ -11,11 +11,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from os.path import isfile
 from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-config = dotenv_values(BASE_DIR.parent / ".env")
+dotenv_path: Path = BASE_DIR.parent / ".env"
+if not dotenv_path.exists():
+    raise FileNotFoundError(".env file not found")
+config = dotenv_values(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -69,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "mysite.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
