@@ -1,5 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
+from django.db.models.fields.files import FileField, FieldFile, ImageFieldFile
+from django.shortcuts import resolve_url
+from django.urls import reverse
 
 
 class MyUserManager(BaseUserManager):
@@ -63,6 +66,14 @@ class MyUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def avatar_url(self):
+        # a: ImageFieldFile = self.avatar
+        if self.avatar:
+            return self.avatar.url
+        else:
+            return reverse("django_pydenticon:identicon", args=[self.user.email])
 
     @property
     def is_staff(self):
