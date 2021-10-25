@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models.fields.files import FileField, FieldFile, ImageFieldFile
 from django.shortcuts import resolve_url
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext_lazy
 
 
 class MyUserManager(BaseUserManager):
@@ -52,11 +54,13 @@ class MyUser(AbstractBaseUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["nickname"]
 
-    def get_full_name(self):
-        return self.email
+    date_joined = models.DateTimeField(
+        gettext_lazy("date joined"), default=timezone.now
+    )
 
-    def get_short_name(self):
-        return self.email
+    class Meta:
+        verbose_name = gettext_lazy("myuser")
+        verbose_name_plural = gettext_lazy("myusers")
 
     def __str__(self):
         return f"{self.email}({self.nickname})"
@@ -68,13 +72,13 @@ class MyUser(AbstractBaseUser):
         return True
 
     @property
+    def is_staff(self):
+        return self.is_admin
+
+    @property
     def avatar_url(self):
         # a: ImageFieldFile = self.avatar
         if self.avatar:
             return self.avatar.url
         else:
             return reverse("django_pydenticon:identicon", args=[self.user.email])
-
-    @property
-    def is_staff(self):
-        return self.is_admin
