@@ -5,6 +5,7 @@ INSTALLED_APPS += [
     "debug_toolbar",
     "django_pydenticon",
     "accounts",
+    "drf_yasg",
 ]
 
 DATABASES = {
