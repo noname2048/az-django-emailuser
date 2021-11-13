@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
+
 from django import forms
+from django.forms import PasswordInput
 
 from .models import MyUser
 
@@ -17,3 +19,8 @@ class MyUserCreationForm(UserCreationForm):
         if commit:
             user.save()
             return user
+
+
+class MyUserLoginForm(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=PasswordInput())

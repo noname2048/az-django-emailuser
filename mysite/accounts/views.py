@@ -1,10 +1,11 @@
+from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from .forms import MyUserCreationForm
+from .forms import MyUserCreationForm, MyUserLoginForm
 from .models import MyUser
 
 
@@ -51,13 +52,14 @@ def welcome_view(request):
 def login_view(request):
     """로그인 진행 함수"""
     if request.method == "GET":
-        form = ...
+        form = MyUserLoginForm
         return render(request, "accounts/login.html", context={"form": form})
 
     else:
-        form = ...
+        form = MyUserLoginForm(request.POST)
         if form.is_valid():
-            user_id = ...
+            user = authenticate(form.email, form.password)
+            # TODO: LOGIN
             return redirect(reverse("accounts:about_user", id=user_id))
 
 
