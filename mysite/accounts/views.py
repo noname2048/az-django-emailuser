@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseBadRequest
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -24,7 +26,8 @@ def signup_view(request):
         form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(True)
-            return redirect(f"{reverse('accounts:welcome')}/?email={form.email}")
+            user_email = form.cleaned_data.get("email")
+            return redirect(f"{reverse('accounts:welcome')}/?email={user_email}")
         else:
             return render(request, "accounts/signup.html", context={"form": form})
 
@@ -58,8 +61,17 @@ def login_view(request):
     else:
         form = MyUserLoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(form.email, form.password)
-            # TODO: LOGIN
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password")
+
+            LoginView
+            user = authenticate(request, email=email)
+            if user is not None:
+                user_id = user.id
+                # TODO: LOGIN
+                return JsonResponse(data={"user_email": user.email})
+            else:
+                return JsonResponse(data={"message": "login fail"})
             return redirect(reverse("accounts:about_user", id=user_id))
 
 
