@@ -12,6 +12,28 @@
         {% csrf_token %}
         {{ form }}
         <button type="submit">제출</button>
+{#        <hr/>#}
+{#        <div>#}
+{#            {{ form.email.label }}#}
+{#            {{ form.email }}#}
+{#        </div>#}
+{#        <div>#}
+{#            {{ form.password1.label }}#}
+{#            {{ form.password2 }}#}
+{#        </div>#}
+{#        <div>#}
+{#            {{ form.password2.label }}#}
+{#            {{ form.password2 }}#}
+{#        </div>#}
+{#        <div>#}
+{#            {{ form.errors }}#}
+{#        </div>#}
+{#        <hr/>#}
+{#        {% for fields in form.fields %}#}
+{#            <div>#}
+{#                {{ fields }}#}
+{#            </div>#}
+{#        {% endfor %}#}
     </form>
 </body>
 </html>
