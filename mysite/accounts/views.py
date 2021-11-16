@@ -63,9 +63,8 @@ def login_view(request):
         if form.is_valid():
             email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
+            user = authenticate(request, username=email, password=password)
 
-            LoginView
-            user = authenticate(request, email=email)
             if user is not None:
                 user_id = user.id
                 # TODO: LOGIN
