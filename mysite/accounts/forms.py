@@ -24,3 +24,8 @@ class MyUserCreationForm(UserCreationForm):
 class MyUserLoginForm(forms.Form):
     email = forms.EmailField(required=True)
     password = forms.CharField(widget=PasswordInput())
+
+
+class MyUserChangePasswordForm(forms.Form):
+    password1 = forms.CharField(widget=PasswordInput())
+    password2 = forms.CharField(widget=PasswordInput())

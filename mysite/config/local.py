@@ -6,6 +6,7 @@ INSTALLED_APPS += [
     "django_pydenticon",
     "accounts",
     "drf_yasg",
+    "django_extensions",
 ]
 
 DATABASES = {

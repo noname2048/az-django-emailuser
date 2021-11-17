@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.hashers import check_password
 from django.db import models
 from django.db.models.fields.files import FileField, FieldFile, ImageFieldFile
 from django.shortcuts import resolve_url
@@ -70,6 +71,9 @@ class MyUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    # def check_password(self, raw_password):
+    #     return check_password(raw_password, self.password)
 
     @property
     def is_staff(self):

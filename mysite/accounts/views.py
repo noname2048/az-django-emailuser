@@ -1,13 +1,18 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponseBadRequest
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import Http404, HttpResponseBadRequest, HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
+# forms
 from .forms import MyUserCreationForm, MyUserLoginForm
+from django.contrib.auth.forms import PasswordChangeForm
+
+# models
 from .models import MyUser
 
 
@@ -63,7 +68,7 @@ def login_view(request):
         if form.is_valid():
             email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 user_id = user.id
@@ -79,3 +84,23 @@ def about_user_view(request, id):
     """유저 정보 확인 함수"""
     user = get_object_or_404(MyUser, pk=id)
     return render(request, "accounts/about_user.html", context={"user": user})
+
+
+@require_http_methods(["GET", "POST"])
+def change_password(request: WSGIRequest) -> HttpResponse:
+    if not request.user.is_authenticated:
+        return redirect(reverse("accounts:login"))
+
+    if request.method == "GET":
+        form = PasswordChangeForm(MyUser)
+        return render(request, "accounts/change_password.html", context={"form": form})
+
+    else:
+        form = PasswordChangeForm(MyUser, request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return render(request, "accounts/change_password.html", context={})
+        else:
+            return render(
+                request, "accounts/change_password.html", context={"form": form}
+            )
