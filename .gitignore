@@ -13,3 +13,7 @@
 
 # pycache
 __pycache__
+
+# shell_plus (jupyter notebook)
+ipynb_checkpoints
+*.ipynb
