@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
@@ -108,3 +108,9 @@ def change_password(request: WSGIRequest) -> HttpResponse:
                 "accounts/change_password.html",
                 context={"form": form},
             )
+
+
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect(reverse("accounts:login"))
