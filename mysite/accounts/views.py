@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 # forms
+from rest_framework.decorators import api_view
+
 from .forms import MyUserCreationForm, MyUserLoginForm
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -17,6 +19,7 @@ from .models import MyUser
 
 
 @require_http_methods(["GET", "POST"])
+@api_view(["GET", "POST"])
 def signup_view(request):
     """회원가입을 도와주는 함수
     GET: form 양식 리턴

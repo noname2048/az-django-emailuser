@@ -27,6 +27,9 @@ from . import converters
 
 register_converter(converters.FilenameExtensionConverter, "ext")
 
+schema_url_patterns = [
+    path("", include("accounts.urls")),
+]
 schema_view = get_schema_view(
     openapi.Info(
         title="Django Email User Practice Api",
@@ -36,6 +39,7 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    patterns=schema_url_patterns,
 )
 
 urlpatterns = [
