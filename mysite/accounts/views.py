@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
@@ -45,6 +45,7 @@ def welcome_view(request):
     (3) 정상일 경우 welcome 출력
     """
     email = request.GET.get("email", None)
+
     if email:
         try:
             user = MyUser.objects.get(email=email)
@@ -71,12 +72,12 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
 
             if user is not None:
-                user_id = user.id
-                # TODO: LOGIN
+                login(request, user)
                 return JsonResponse(data={"user_email": user.email})
             else:
                 return JsonResponse(data={"message": "login fail"})
-            return redirect(reverse("accounts:about_user", id=user_id))
+        else:
+            return render(request, "accounts/login.html", context={"form": form})
 
 
 @require_http_methods(["GET"])
@@ -96,11 +97,14 @@ def change_password(request: WSGIRequest) -> HttpResponse:
         return render(request, "accounts/change_password.html", context={"form": form})
 
     else:
-        form = PasswordChangeForm(MyUser, request.POST)
+        user = request.user
+        form = PasswordChangeForm(user, request.POST)
         if form.is_valid():
             form.save(commit=True)
-            return render(request, "accounts/change_password.html", context={})
+            return render(request, "accounts/change_password_complete.html", context={})
         else:
             return render(
-                request, "accounts/change_password.html", context={"form": form}
+                request,
+                "accounts/change_password.html",
+                context={"form": form},
             )

@@ -72,8 +72,8 @@ class MyUser(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    # def check_password(self, raw_password):
-    #     return check_password(raw_password, self.password)
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     @property
     def is_staff(self):
