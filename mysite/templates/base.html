@@ -10,8 +10,15 @@
     {% endblock head %}
 </head>
 <body>
+    <form action="">
+        <p>책검색하기</p>
+        <input type="text" name="book-search">
+    </form>
     <nav>
         <ul>
+            <li>홈</li>
+            <li>책장들</li>
+
             {% if user.is_authenticate %}
                 {{ user.avatar }}
                <li><a href="{% url "accounts:logout" %}">로그아웃</a></li>

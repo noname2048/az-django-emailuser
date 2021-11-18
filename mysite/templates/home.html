@@ -11,4 +11,19 @@
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- https://developers.google.com/identity/sign-in/web/sign-in -->
+
+    {% if user.is_authenticate %}
+        <p>책 등록하기</p>
+        <form action="">
+            <label for="isbn13">isbn13:</label>
+            <input type="text" name="isbn13">
+        </form>
+        <p>유저 책장</p>
+    {% else %}
+        <p>서지정보로 책 검색하기</p>
+        <form action="">
+            <label for="isbn13">isbn13:</label>
+            <input type="text" name="isbn13">
+        </form>
+    {% endif %}
 {% endblock content %}
